@@ -132,3 +132,4 @@ class EntityManager:
                 changed = True
             if changed:
                 minmax["dirty"] = True
+        return minmax

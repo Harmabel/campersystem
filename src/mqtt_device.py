@@ -10,7 +10,7 @@ class MQTTDevice:
         self.state = state
         self.host = host
         self.db = db
-        self.client = MQTTClient("homesystem")
+        self.client = MQTTClient("campersystem")
 
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
@@ -42,6 +42,7 @@ class MQTTDevice:
         self.client.publish(topic, payload)
 
     async def on_message(self, client, topic, payload, qos, properties):
+        print(topic)
         sensorkey,msgdata = self.parse_msgdata(topic,payload)
         for sensorkey, value in msgdata:
             entityId = self.entity_manager.convert_sensorkey(str(sensorkey))

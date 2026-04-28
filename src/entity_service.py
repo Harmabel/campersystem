@@ -22,25 +22,19 @@ class EntityService:
             value=value,
             ts=self.datetime.now(),
         )
-
+        min =''
+        max =''
         # min/max alleen bijwerken als het een getal is
         if value is not None:
             minmax_enabled = self.entity_manager.get_key_value(entityId, "minmax")
             if minmax_enabled == "J":
-                self.entity_manager.update_minmax(entityId, value)
+                minmax = self.entity_manager.update_minmax(entityId, value)
+                min = minmax.get('min')
+                max = minmax.get['max']
 
         ui_name = self.entity_manager.get_key_value(entityId, "ui_name")
         if not ui_name:
             return
-
-        # await self.bus.emit("entity_updated", {
-        #     "entityId": entityId,
-        #     "updates": {
-        #         "entityId": entityId,
-        #         "state": state,
-        #         "value": value
-        #     }
-        # })
 
         await self.bus.emit("entity_updated", {
             "type": "entity_update",
@@ -48,6 +42,6 @@ class EntityService:
             "ui_name": ui_name,
             "state": state,
             "value": value,
-            "min": minmax.get("min"),
-            "max": minmax.get("max")
+            "min": min,
+            "max": max
         })
